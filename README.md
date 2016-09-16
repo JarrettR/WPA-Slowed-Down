@@ -14,5 +14,7 @@ Perhaps this will be useful to someone else.
 ## Benchmarks
 
 Hash speed of my general purpose computer; 2,000 keys / second
+
 Hash speed of a Raspberry Pi 1: 45 keys / second
+
 Hash speed of this project: 0.25 keys / second
