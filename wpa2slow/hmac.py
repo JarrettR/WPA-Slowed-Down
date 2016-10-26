@@ -22,35 +22,6 @@ from python_sha1 import Sha1Model
 import hashlib
 import hmac
 
-import cocotb
-from cocotb.decorators import coroutine
-from cocotb.triggers import RisingEdge, ReadOnly, NextTimeStep, Event
-from cocotb.drivers import BusDriver, ValidatedBusDriver
-from cocotb.utils import hexdump
-from cocotb.binary import BinaryValue
-from cocotb.result import ReturnValue, TestError
-
-class HmacDriver(BusDriver):
-    """
-    HMAC Driver
-    """
-    _signals = ["dat_i", "load_i", "rst_i"]
-    _optional_signals = []
-
-    def __init__(self, entity, name, clock):
-        BusDriver.__init__(self, entity, name, clock)
-        
-        word   = BinaryValue(bits=32)
-        single = BinaryValue(bits=1)
-
-        word.binstr   = ("x" * 32)
-        single.binstr = ("x")
-
-        self.bus.load_i <= single
-        self.bus.rst_i <= single
-        self.bus.dat_i <= word
-        
-
 class HmacModel(object):
     
     def __init__(self, Sha1Obj):
