@@ -55,11 +55,25 @@ def test_hmac():
     value = 'value'
     print "Goal:   " + hmac.new(secret, value, hashlib.sha1).hexdigest()
     print "Result: " + objHmac.load(secret, value)
+    
+def test_pbkdf2():
+    objSha = wpa2slow.sha1.Sha1Model()
+    objHmac = wpa2slow.hmac.HmacModel(objSha)
+    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2Model()
+    secret = 'Jefe'
+    value = 'what do ya want for nothing?'
+    secret = 'secret'
+    value = 'value'
+    
+    # 64 hex digits / 32 bytes / 256 bits
+    print objPbkdf2.run(objHmac, secret, value)
 
 if __name__ == "__main__":
     print "Testing SHA1: "
     test_sha1()
     print "Testing HMAC: "
     test_hmac()
+    print "Testing PBKDF2: "
+    test_pbkdf2()
     print "Finished"
     

@@ -20,8 +20,8 @@
 ################################################################################
 import hashlib #For testing mock objects
 import random
-from python_sha1 import Sha1Model
-from python_hmac import HmacModel
+from sha1 import Sha1Model
+from hmac import HmacModel
 
 class Pbkdf2Model(object):
     
