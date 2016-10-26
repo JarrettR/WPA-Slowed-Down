@@ -22,6 +22,7 @@
 import wpa2slow
 import random
 import hashlib 
+import hmac 
 
 
 def test_sha1():
@@ -41,9 +42,24 @@ def test_sha1():
             print "-------------- NOT EQUAL"
         print "------------"
 
-
+def test_hmac():
+    objSha = wpa2slow.sha1.Sha1Model()
+    objHmac = wpa2slow.hmac.HmacModel(objSha)
+    
+    secret = 'Jefe'
+    value = 'what do ya want for nothing?'
+    print "Goal:   " + hmac.new(secret, value, hashlib.sha1).hexdigest()
+    print "Result: " + objHmac.load(secret, value)
+    
+    secret = 'secret'
+    value = 'value'
+    print "Goal:   " + hmac.new(secret, value, hashlib.sha1).hexdigest()
+    print "Result: " + objHmac.load(secret, value)
 
 if __name__ == "__main__":
+    print "Testing SHA1: "
     test_sha1()
+    print "Testing HMAC: "
+    test_hmac()
     print "Finished"
     

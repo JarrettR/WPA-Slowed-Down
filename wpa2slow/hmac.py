@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from python_sha1 import Sha1Model
+from sha1 import Sha1Model
 import hashlib
 import hmac
 
