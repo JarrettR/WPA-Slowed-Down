@@ -32,6 +32,7 @@ class Handshake(object):
         fp = open(filename, mode='rb')
         
         #https://hashcat.net/wiki/doku.php?id=hccap
+        #char          essid[36];
         #unsigned char mac1[6];
         #unsigned char mac2[6];
         #unsigned char nonce1[32];
@@ -41,13 +42,20 @@ class Handshake(object):
         #int           keyver;
         #unsigned char keymic[16];
         
-        ssid = struct.unpack('<36s', fp.read(36))
-        print ssid
-        ssid = struct.unpack('<6s', fp.read(6))
-        print ssid
+        self.ssid = struct.unpack('<36s', fp.read(36))
+        self.mac1 = struct.unpack('<6s', fp.read(6))
+        self.mac2 = struct.unpack('<6s', fp.read(6))
+        self.nonce1 = struct.unpack('<32s', fp.read(32))
+        self.nonce2 = struct.unpack('<32s', fp.read(32))
+        self.eapol = struct.unpack('<256s', fp.read(256))
+        self.eapol_size = struct.unpack('<1I', fp.read(4))
+        self.keyver = struct.unpack('<1I', fp.read(4))   #0x01 means WPA - Abort! Anything else good.
+        self.keymic = struct.unpack('<16s', fp.read(16))
+        
+        return (self.ssid, self.mac1, self.mac2, self.nonce1, self.nonce2, self.eapol, self.keymic)
 
 if __name__ == "__main__":
-    print 'Sup'
+    print 'Loading handshake...'
     obj = Handshake()
     obj.load('../test/wpa2.hccap')
     

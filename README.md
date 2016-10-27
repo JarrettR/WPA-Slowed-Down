@@ -24,3 +24,5 @@ Hash speed of this project: 0.25 keys / second
 Clone this repo, and then from this directory, type `pip install .`
 
 Check `main.py` for examples and test cases.
+
+Capture files can be read and parsed in [hccap](https://hashcat.net/cap2hccap/) format.

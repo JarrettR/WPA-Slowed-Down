@@ -94,6 +94,18 @@ def test_prf():
     
     print "Result: " + objPrf.PRF(pmk, apMac, cMac, apNonce, cNonce)
     print "Goal:   " + ptk
+    
+def test_handshake_load():
+    obj = wpa2slow.handshake.Handshake()
+    (ssid, mac1, mac2, nonce1, nonce2, eapol, keymic) = obj.load('test/wpa2.hccap')
+    
+    print ssid
+    print mac1
+    print mac2
+    print nonce1
+    print nonce2
+    print eapol
+    print keymic
 
 if __name__ == "__main__":
     print "Testing SHA1: "
@@ -104,5 +116,7 @@ if __name__ == "__main__":
     test_pbkdf2()
     print "Testing PRF: "
     test_prf()
+    print 'Testing handshake load:'
+    test_handshake_load()
     print "Finished"
     
