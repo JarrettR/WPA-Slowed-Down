@@ -19,7 +19,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 import hashlib #For testing mock objects
-import hmac
 import random
 from binascii import a2b_hex, b2a_hex 
 from sha1 import Sha1Model
@@ -38,23 +37,25 @@ class PrfModel(object):
     def PRF(self, pmk, apMac, cMac, apNonce, cNonce):
         
         b = min(apMac, cMac) + max(apMac, cMac) + min(apNonce, cNonce) + max(apNonce, cNonce)
-        print b
+        #print b
         r = ""
         
         #Note: The spec says to loop this waaaay too many times and then truncate output
         for x in xrange(4):
             r = r + self.objHmac.load(self.toAscii(pmk), self.a + self.toAscii("00" + b + "{:02x}".format(x)))
-            print r
+            #print r
         
         out = r
         return out[0:32]
 
     def MIC(self, ptk, data):
+        objSha = Sha1Model()
+        objHmac = HmacModel(objSha)
+        
         ptk = self.toAscii(ptk)
         data = self.toAscii(data)
         
-        #Todo: investigate why my function breaks here (data length?)
-        out = hmac.new(ptk[0:16],data).hexdigest()       
+        out = objHmac.load(ptk[0:16],data)       
         
         return out[0:32]
 

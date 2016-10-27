@@ -95,6 +95,21 @@ def test_prf():
     print "Result: " + objPrf.PRF(pmk, apMac, cMac, apNonce, cNonce)
     print "Goal:   " + ptk
     
+def test_mic():
+    objSha = wpa2slow.sha1.Sha1Model()
+    objHmac = wpa2slow.hmac.HmacModel(objSha)
+    objPrf = wpa2slow.compare.PrfModel(objHmac)
+    
+    ptk = 'bf49a95f0494f44427162f38696ef8b6'
+    
+    data = '0103005ffe01090020000000000000000100000000' + \
+    '0000000000000000000000000000000000000000000000000' + \
+    '0000000000000000000000000000000000000000000000000' + \
+    '00000000000000000000000000000000000000000000000000000000'
+
+    print "Result: " + objPrf.MIC(ptk, data)
+    print 'Goal:   45282522bc6707d6a70a0317a3ed48f0'
+    
 def test_handshake_load():
     obj = wpa2slow.handshake.Handshake()
     (ssid, mac1, mac2, nonce1, nonce2, eapol, keymic) = obj.load('test/wpa2.hccap')
@@ -106,17 +121,53 @@ def test_handshake_load():
     print nonce2
     print eapol
     print keymic
+    
+def test_full():
+    obj = wpa2slow.handshake.Handshake()
+    objSha = wpa2slow.sha1.Sha1Model()
+    objHmac = wpa2slow.hmac.HmacModel(objSha)
+    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2Model()
+    objPrf = wpa2slow.compare.PrfModel(objHmac)
+    
+    (ssid, mac1, mac2, nonce1, nonce2, eapol, keymic) = obj.load('test/wpa2.hccap')
+    
+    print ssid
+    print mac1
+    print mac2
+    print nonce1
+    print nonce2
+    print eapol
+    print keymic
+    
+    mk = 'dictionary'
+    print mk
+    
+    pmk = objPbkdf2.run(objHmac, mk, str(ssid))
+    print pmk
+    
+    #This is so weird because of my terrible inconsistent binary types
+    ptk = objPrf.PRF(pmk, objPrf.toHexString(mac1[0]), objPrf.toHexString(mac2[0]), objPrf.toHexString(nonce1[0]), objPrf.toHexString(nonce2[0]))
+    print ptk
+    
+    mic = objPrf.MIC(ptk, objPrf.toHexString(eapol[0]))
+    print 'MIC:       ' + mic
+    print 'Expected:  ' + objPrf.toHexString(keymic[0])
+    
 
 if __name__ == "__main__":
     print "Testing SHA1: "
-    test_sha1()
+    #test_sha1()
     print "Testing HMAC: "
-    test_hmac()
+    #test_hmac()
     print "Testing PBKDF2: "
-    test_pbkdf2()
+    #test_pbkdf2()
     print "Testing PRF: "
-    test_prf()
+    #test_prf()
+    print "Testing MIC: "
+    #test_mic()
     print 'Testing handshake load:'
-    test_handshake_load()
+    #test_handshake_load()
+    print 'Testing Full Process:'
+    test_full()
     print "Finished"
     
