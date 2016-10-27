@@ -131,23 +131,39 @@ def test_full():
     
     (ssid, mac1, mac2, nonce1, nonce2, eapol, keymic) = obj.load('test/wpa2.hccap')
     
-    print ssid
-    print mac1
-    print mac2
-    print nonce1
-    print nonce2
-    print eapol
-    print keymic
+    '''
+                              KEY FOUND! [ dictionary ]
+
+
+      Master Key     : 5D F9 20 B5 48 1E D7 05 38 DD 5F D0 24 23 D7 E2
+                       52 22 05 FE EE BB 97 4C AD 08 A5 2B 56 13 ED E2
+
+      Transient Key  : 1E 5A DB F5 22 3A 16 57 D9 6A 99 A5 DB 1E 66 BC
+                       75 78 10 2D 78 0E 59 37 84 1B B0 73 6A FA 67 18
+                       03 C8 A3 E8 F5 B3 C8 25 D3 DC CC E7 E5 E3 F2 63
+                       D1 BF 55 EE C9 41 0F 03 BD 39 12 36 12 C2 A6 BA
+
+      EAPOL HMAC     : 0E 71 A6 25 FA AD E7 CE 9C 82 21 F7 B1 DB CE 46
+      '''
+    
+    print 'ssid:   ' + objPrf.toHexString(ssid[0].rstrip('\0'))
+    print 'mac1:   ' + objPrf.toHexString(mac1[0])
+    print 'mac2:   ' + objPrf.toHexString(mac2[0])
+    print 'nonce1: ' + objPrf.toHexString(nonce1[0])
+    print 'nonce2: ' + objPrf.toHexString(nonce2[0])
+    print 'eapol:  ' + objPrf.toHexString(eapol[0])
+    print 'keymic: ' + objPrf.toHexString(keymic[0])
     
     mk = 'dictionary'
-    print mk
+    print 'mk:     ' + mk
     
-    pmk = objPbkdf2.run(objHmac, mk, str(ssid))
-    print pmk
+    #Todo: investigate null byte removal rules
+    pmk = objPbkdf2.run(objHmac, mk, ssid[0].rstrip('\0'))
+    print 'pmk:    ' + pmk
     
     #This is so weird because of my terrible inconsistent binary types
     ptk = objPrf.PRF(pmk, objPrf.toHexString(mac1[0]), objPrf.toHexString(mac2[0]), objPrf.toHexString(nonce1[0]), objPrf.toHexString(nonce2[0]))
-    print ptk
+    print 'ptk:    ' + ptk
     
     mic = objPrf.MIC(ptk, objPrf.toHexString(eapol[0]))
     print 'MIC:       ' + mic
@@ -155,17 +171,17 @@ def test_full():
     
 
 if __name__ == "__main__":
-    print "Testing SHA1: "
+    #print "Testing SHA1: "
     #test_sha1()
-    print "Testing HMAC: "
+    #print "Testing HMAC: "
     #test_hmac()
-    print "Testing PBKDF2: "
+    #print "Testing PBKDF2: "
     #test_pbkdf2()
-    print "Testing PRF: "
+    #print "Testing PRF: "
     #test_prf()
-    print "Testing MIC: "
+    #print "Testing MIC: "
     #test_mic()
-    print 'Testing handshake load:'
+    #print 'Testing handshake load:'
     #test_handshake_load()
     print 'Testing Full Process:'
     test_full()
