@@ -7,6 +7,6 @@ setup(name='wpa2slow',
       url='http://github.com/JarrettR/WPA-Slowed-Down',
       author='Jarrett Rainier',
       author_email='jrainier@gmail.com',
-      license='GPL3',
+      license='GPL',
       packages=['wpa2slow'],
       zip_safe=False)

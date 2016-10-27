@@ -25,4 +25,4 @@ Clone this repo, and then from this directory, type `pip install .`
 
 Check `main.py` for examples and test cases.
 
-Capture files can be read and parsed in [hccap](https://hashcat.net/cap2hccap/) format.
+Can read and parse capture files in [hccap](https://hashcat.net/cap2hccap/) format, outputting the required inputs.
