@@ -52,7 +52,7 @@ class Handshake(object):
         self.keyver = struct.unpack('<1I', fp.read(4))   #0x01 means WPA - Abort! Anything else good.
         self.keymic = struct.unpack('<16s', fp.read(16))
         
-        return (self.ssid, self.mac1, self.mac2, self.nonce1, self.nonce2, self.eapol, self.keymic)
+        return (self.ssid, self.mac1, self.mac2, self.nonce1, self.nonce2, self.eapol, self.eapol_size, self.keymic)
 
 if __name__ == "__main__":
     print 'Loading handshake...'

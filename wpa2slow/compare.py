@@ -24,6 +24,21 @@ from binascii import a2b_hex, b2a_hex
 from sha1 import Sha1Model
 from hmac import HmacModel
 
+'''
+                          KEY FOUND! [ dictionary ]
+
+
+  Master Key     : 5D F9 20 B5 48 1E D7 05 38 DD 5F D0 24 23 D7 E2
+                   52 22 05 FE EE BB 97 4C AD 08 A5 2B 56 13 ED E2
+
+  Transient Key  : 1E 5A DB F5 22 3A 16 57 D9 6A 99 A5 DB 1E 66 BC
+                   75 78 10 2D 78 0E 59 37 84 1B B0 73 6A FA 67 18
+                   03 C8 A3 E8 F5 B3 C8 25 D3 DC CC E7 E5 E3 F2 63
+                   D1 BF 55 EE C9 41 0F 03 BD 39 12 36 12 C2 A6 BA
+
+  EAPOL HMAC     : 0E 71 A6 25 FA AD E7 CE 9C 82 21 F7 B1 DB CE 46
+'''
+      
 class PrfModel(object):
 
     def __init__(self, objHmac):
@@ -37,13 +52,13 @@ class PrfModel(object):
     def PRF(self, pmk, apMac, cMac, apNonce, cNonce):
         
         b = min(apMac, cMac) + max(apMac, cMac) + min(apNonce, cNonce) + max(apNonce, cNonce)
-        #print b
+        print b
         r = ""
         
         #Note: The spec says to loop this waaaay too many times and then truncate output
         for x in xrange(4):
             r = r + self.objHmac.load(self.toAscii(pmk), self.a + self.toAscii("00" + b + "{:02x}".format(x)))
-            #print r
+            print r
         
         out = r
         return out[0:32]
@@ -55,7 +70,7 @@ class PrfModel(object):
         ptk = self.toAscii(ptk)
         data = self.toAscii(data)
         
-        out = objHmac.load(ptk[0:16],data)       
+        out = objHmac.load(ptk,data)       
         
         return out[0:32]
 
