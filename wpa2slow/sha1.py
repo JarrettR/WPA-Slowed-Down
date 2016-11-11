@@ -21,7 +21,7 @@
 import hashlib #For testing my mock objects
 import random
 
-class Sha1Model(object):
+class Sha1(object):
     K0 = 0x5A827999       #( 0 <= t <= 19)
     K1 = 0x6ED9EBA1       #(20 <= t <= 39)
     K2 = 0x8F1BBCDC       #(40 <= t <= 59)
@@ -247,7 +247,7 @@ class Sha1Model(object):
         return W[:-1]
 
 if __name__ == "__main__":
-    obj = Sha1Model()
+    obj = Sha1()
     
     str = ''
 

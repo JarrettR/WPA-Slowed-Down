@@ -26,34 +26,63 @@ class Handshake(object):
         self.reset()
         
     def reset(self):
-        self.b = ''
+        self.ssid = None
+        self.mac1 = None
+        self.mac2 = None
+        self.nonce1 = None
+        self.nonce2 = None
+        self.eapol = None
+        self.eapol_size = None
+        self.keyver = None
+        self.keymic = None
         
-    def load(self, filename):
+    def load(self, filename, hccap=True):
+        '''
+        Load handshake file.
+        Defaults:
+        hccap=True - File to be loaded is in Hashcat capture format
+        '''
         fp = open(filename, mode='rb')
         
-        #https://hashcat.net/wiki/doku.php?id=hccap
-        #char          essid[36];
-        #unsigned char mac1[6];
-        #unsigned char mac2[6];
-        #unsigned char nonce1[32];
-        #unsigned char nonce2[32];
-        #unsigned char eapol[256];
-        #int           eapol_size;
-        #int           keyver;
-        #unsigned char keymic[16];
+        if hccap == True:
         
-        self.ssid = struct.unpack('<36s', fp.read(36))
-        self.mac1 = struct.unpack('<6s', fp.read(6))
-        self.mac2 = struct.unpack('<6s', fp.read(6))
-        self.nonce1 = struct.unpack('<32s', fp.read(32))
-        self.nonce2 = struct.unpack('<32s', fp.read(32))
-        self.eapol = struct.unpack('<256s', fp.read(256))
-        self.eapol_size = struct.unpack('<1I', fp.read(4))
-        self.keyver = struct.unpack('<1I', fp.read(4))   #0x01 means WPA - Abort! Anything else good.
-        self.keymic = struct.unpack('<16s', fp.read(16))
+            #https://hashcat.net/wiki/doku.php?id=hccap
+            #char          essid[36];
+            #unsigned char mac1[6];
+            #unsigned char mac2[6];
+            #unsigned char nonce1[32];
+            #unsigned char nonce2[32];
+            #unsigned char eapol[256];
+            #int           eapol_size;
+            #int           keyver;
+            #unsigned char keymic[16];
+            
+            #Todo: investigate null byte removal rules in original spec
+            self.ssid = struct.unpack('<36s', fp.read(36))[0].rstrip('\0')
+            self.mac1 = struct.unpack('<6s', fp.read(6))[0]
+            self.mac2 = struct.unpack('<6s', fp.read(6))[0]
+            self.nonce1 = struct.unpack('<32s', fp.read(32))[0]
+            self.nonce2 = struct.unpack('<32s', fp.read(32))[0]
+            self.eapol = struct.unpack('<256s', fp.read(256))[0]
+            self.eapol_size = struct.unpack('<1I', fp.read(4))[0]
+            self.keyver = struct.unpack('<1I', fp.read(4))[0]   #0x01 means WPA - Abort! Anything else good.
+            self.keymic = struct.unpack('<16s', fp.read(16))[0]
+            
+            fp.close()
+        else:
+            fp.close()
+            raise NotImplementedError('Write Wireshark / AC capture format parser')
         
-        return (self.ssid, self.mac1, self.mac2, self.nonce1, self.nonce2, self.eapol, self.eapol_size, self.keymic)
-
+    def is_wpa2(self):
+        '''
+        Checks to make sure that:
+        A) self.keyver is set, and
+        B) self.keyver is not 0x01.
+        0x01 means original WPA, and is not supported
+        '''
+        raise NotImplementedError('Write this tester')
+        
+        
 if __name__ == "__main__":
     print 'Loading handshake...'
     obj = Handshake()

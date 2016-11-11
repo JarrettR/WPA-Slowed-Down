@@ -20,10 +20,10 @@
 ################################################################################
 import hashlib #For testing mock objects
 import random
-from sha1 import Sha1Model
-from hmac import HmacModel
+from sha1 import Sha1
+from hmac import Hmac
 
-class Pbkdf2Model(object):
+class Pbkdf2(object):
     
     def __init__(self):
         self.W = [0] * 80
@@ -86,9 +86,9 @@ class Pbkdf2Model(object):
         return str
 
 if __name__ == "__main__":
-    objSha = Sha1Model()
-    objHmac = HmacModel(objSha)
-    objPbkdf2 = Pbkdf2Model()
+    objSha = Sha1()
+    objHmac = Hmac(objSha)
+    objPbkdf2 = Pbkdf2()
     secret = 'Jefe'
     value = 'what do ya want for nothing?'
     secret = 'secret'

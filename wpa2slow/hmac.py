@@ -18,11 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from sha1 import Sha1Model
+from sha1 import Sha1
 import hashlib
 import hmac
 
-class HmacModel(object):
+class Hmac(object):
     
     def __init__(self, Sha1Obj):
         self.Sha1 = Sha1Obj
@@ -68,8 +68,8 @@ class HmacModel(object):
         return out
 
 if __name__ == "__main__":
-    objSha = Sha1Model()
-    objHmac = HmacModel(objSha)
+    objSha = Sha1()
+    objHmac = Hmac(objSha)
     secret = 'Jefe'
     value = 'what do ya want for nothing?'
     secret = 'secret'

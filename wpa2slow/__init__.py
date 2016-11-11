@@ -1,13 +1,13 @@
 __all__ = [
-    'Sha1Model',
-    'HmacModel',
-    'Pbkdf2Model',
-    'PrfModel',
+    'Sha1',
+    'Hmac',
+    'Pbkdf2',
+    'Prf',
     'Handshake'
 ]
 
-from .sha1 import Sha1Model
-from .hmac import HmacModel
-from .pbkdf2 import Pbkdf2Model
-from .compare import PrfModel
+from .sha1 import Sha1
+from .hmac import Hmac
+from .pbkdf2 import Pbkdf2
+from .compare import Prf
 from .handshake import Handshake

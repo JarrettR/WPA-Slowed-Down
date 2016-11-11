@@ -18,11 +18,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-import hashlib #For testing mock objects
 import random
 from binascii import a2b_hex, b2a_hex 
-from sha1 import Sha1Model
-from hmac import HmacModel
+from sha1 import Sha1
+from hmac import Hmac
 
 '''
                           KEY FOUND! [ dictionary ]
@@ -39,7 +38,7 @@ from hmac import HmacModel
   EAPOL HMAC     : 0E 71 A6 25 FA AD E7 CE 9C 82 21 F7 B1 DB CE 46
 '''
       
-class PrfModel(object):
+class Prf(object):
 
     def __init__(self, objHmac):
         self.objHmac = objHmac
@@ -64,8 +63,8 @@ class PrfModel(object):
         return out[0:32]
 
     def MIC(self, ptk, data):
-        objSha = Sha1Model()
-        objHmac = HmacModel(objSha)
+        objSha = Sha1()
+        objHmac = Hmac(objSha)
         
         ptk = self.toAscii(ptk)
         data = self.toAscii(data)
@@ -104,9 +103,9 @@ class PrfModel(object):
         return str
 
 if __name__ == "__main__":
-    objSha = Sha1Model()
-    objHmac = HmacModel(objSha)
-    objPrf = PrfModel(objHmac)
+    objSha = Sha1()
+    objHmac = Hmac(objSha)
+    objPrf = Prf(objHmac)
     
     pmk = '9051ba43660caec7a909fbbe6b91e4685f1457b5a2e23660d728afbd2c7abfba'
     apMac = '001dd0f694b0'

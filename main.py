@@ -26,7 +26,7 @@ import hmac
 
 
 def test_sha1():
-    obj = wpa2slow.sha1.Sha1Model()
+    obj = wpa2slow.sha1.Sha1()
     
     str = ''
 
@@ -43,8 +43,8 @@ def test_sha1():
         print "------------"
 
 def test_hmac():
-    objSha = wpa2slow.sha1.Sha1Model()
-    objHmac = wpa2slow.hmac.HmacModel(objSha)
+    objSha = wpa2slow.sha1.Sha1()
+    objHmac = wpa2slow.hmac.Hmac(objSha)
     
     secret = 'Jefe'
     value = 'what do ya want for nothing?'
@@ -57,9 +57,9 @@ def test_hmac():
     print "Result: " + objHmac.load(secret, value)
     
 def test_pbkdf2():
-    objSha = wpa2slow.sha1.Sha1Model()
-    objHmac = wpa2slow.hmac.HmacModel(objSha)
-    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2Model()
+    objSha = wpa2slow.sha1.Sha1()
+    objHmac = wpa2slow.hmac.Hmac(objSha)
+    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2()
     secret = 'Jefe'
     value = 'what do ya want for nothing?'
     secret = 'secret'
@@ -69,9 +69,9 @@ def test_pbkdf2():
     print objPbkdf2.run(objHmac, secret, value)
     
 def test_prf():
-    objSha = wpa2slow.sha1.Sha1Model()
-    objHmac = wpa2slow.hmac.HmacModel(objSha)
-    objPrf = wpa2slow.compare.PrfModel(objHmac)
+    objSha = wpa2slow.sha1.Sha1()
+    objHmac = wpa2slow.hmac.Hmac(objSha)
+    objPrf = wpa2slow.compare.Prf(objHmac)
     
     pmk = '9051ba43660caec7a909fbbe6b91e4685f1457b5a2e23660d728afbd2c7abfba'
     cMac = '001dd0f694b0'
@@ -96,9 +96,9 @@ def test_prf():
     print "Goal:   " + ptk
     
 def test_mic():
-    objSha = wpa2slow.sha1.Sha1Model()
-    objHmac = wpa2slow.hmac.HmacModel(objSha)
-    objPrf = wpa2slow.compare.PrfModel(objHmac)
+    objSha = wpa2slow.sha1.Sha1()
+    objHmac = wpa2slow.hmac.Hmac(objSha)
+    objPrf = wpa2slow.compare.Prf(objHmac)
     
     ptk = 'bf49a95f0494f44427162f38696ef8b6'
     
@@ -112,7 +112,16 @@ def test_mic():
     
 def test_handshake_load():
     obj = wpa2slow.handshake.Handshake()
-    (ssid, mac1, mac2, nonce1, nonce2, eapol, eapol_size, keymic) = obj.load('test/wpa2.hccap')
+    
+    obj.load('test/wpa2.hccap')
+    ssid = obj.ssid
+    mac1 = obj.mac1
+    mac2 = obj.mac2
+    nonce1 = obj.nonce1
+    nonce2 = obj.nonce2
+    eapol = obj.eapol
+    eapol_size = obj.eapol_size
+    keymic = obj.keymic
     
     print ssid
     print mac1
@@ -125,38 +134,45 @@ def test_handshake_load():
     
 def test_full():
     obj = wpa2slow.handshake.Handshake()
-    objSha = wpa2slow.sha1.Sha1Model()
-    objHmac = wpa2slow.hmac.HmacModel(objSha)
-    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2Model()
-    objPrf = wpa2slow.compare.PrfModel(objHmac)
+    objSha = wpa2slow.sha1.Sha1()
+    objHmac = wpa2slow.hmac.Hmac(objSha)
+    objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2()
+    objPrf = wpa2slow.compare.Prf(objHmac)
     
-    (ssid, mac1, mac2, nonce1, nonce2, eapol, eapol_size, keymic) = obj.load('test/wpa2.hccap')
+    obj.load('test/wpa2.hccap')
+    ssid = obj.ssid
+    mac1 = obj.mac1
+    mac2 = obj.mac2
+    nonce1 = obj.nonce1
+    nonce2 = obj.nonce2
+    eapol = obj.eapol
+    eapol_size = obj.eapol_size
+    keymic = obj.keymic
     
-    print 'ssid:        ' + objPrf.toHexString(ssid[0].rstrip('\0'))
-    print 'mac1:        ' + objPrf.toHexString(mac1[0])
-    print 'mac2:        ' + objPrf.toHexString(mac2[0])
-    print 'nonce1:      ' + objPrf.toHexString(nonce1[0])
-    print 'nonce2:      ' + objPrf.toHexString(nonce2[0])
-    print 'eapol:       ' + objPrf.toHexString(eapol[0][0:eapol_size[0]])
-    print 'eapol_size:  ' + str(eapol_size[0])
-    print 'keymic:      ' + objPrf.toHexString(keymic[0])
+    print 'ssid:        ' + objPrf.toHexString(ssid)
+    print 'mac1:        ' + objPrf.toHexString(mac1)
+    print 'mac2:        ' + objPrf.toHexString(mac2)
+    print 'nonce1:      ' + objPrf.toHexString(nonce1)
+    print 'nonce2:      ' + objPrf.toHexString(nonce2)
+    print 'eapol:       ' + objPrf.toHexString(eapol[0:eapol_size])
+    print 'eapol_size:  ' + str(eapol_size)
+    print 'keymic:      ' + objPrf.toHexString(keymic)
     
     mk = 'dictionary'
     print 'mk:          ' + mk
     
-    #Todo: investigate null byte removal rules
-    pmk = objPbkdf2.run(objHmac, mk, ssid[0].rstrip('\0'))
+    pmk = objPbkdf2.run(objHmac, mk, ssid)
     print 'pmk:         ' + pmk
     
     #This is so weird because of my terrible inconsistent binary types
     #     see https://github.com/JarrettR/WPA-Slowed-Down/issues/2
-    ptk = objPrf.PRF(pmk, objPrf.toHexString(mac1[0]), objPrf.toHexString(mac2[0]), objPrf.toHexString(nonce1[0]), objPrf.toHexString(nonce2[0]))
+    ptk = objPrf.PRF(pmk, objPrf.toHexString(mac1), objPrf.toHexString(mac2), objPrf.toHexString(nonce1), objPrf.toHexString(nonce2))
     print 'ptk:         ' + ptk
     
-    mic = objPrf.MIC(ptk, objPrf.toHexString((eapol[0])[0:eapol_size[0]]))
+    mic = objPrf.MIC(ptk, objPrf.toHexString(eapol[0:eapol_size]))
     print 'MIC:         ' + mic
-    print 'Expected:    ' + objPrf.toHexString(keymic[0])
-    if mic == objPrf.toHexString(keymic[0]):
+    print 'Expected:    ' + objPrf.toHexString(keymic)
+    if mic == objPrf.toHexString(keymic):
         print 'Key found!'
     else:
         print 'Attempt failed!'
@@ -176,6 +192,6 @@ if __name__ == "__main__":
     print 'Testing handshake load:'
     test_handshake_load()
     print 'Testing Full Process:'
-    test_full()
+    #test_full()
     print "Finished"
     
