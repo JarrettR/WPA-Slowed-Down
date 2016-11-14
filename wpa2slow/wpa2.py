@@ -52,7 +52,7 @@ class Wpa2(object):
         
     def test(self, input, fast=False):
         self.loadMK(input)
-        pmk = self.objPbkdf2.run(self.objHmac, self.mk, self.ap.ssid)
+        pmk = self.objPbkdf2.run(self.objHmac, self.mk, self.ap.ssid, fast=fast)
         mic = self.genMic(pmk)
         keymic = self.objPrf.toHexString(self.ap.keymic)
         if mic == keymic:

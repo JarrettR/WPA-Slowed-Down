@@ -33,7 +33,7 @@ class Pbkdf2(object):
         self.message = [0] * 64
         self.messageLength = 0
         
-    def run(self, objHmac, mk, ssid):
+    def run(self, objHmac, mk, ssid, fast=False):
         
         x1 = objHmac.load(mk, ssid + '\0\0\0\1')
         x2 = objHmac.load(mk, ssid + '\0\0\0\2')

@@ -27,14 +27,27 @@ if __name__ == "__main__":
     capFile.load('tests/data/wpa2.hccap')
     
     print 'Loaded capture file for ' + capFile.ssid + '!'
-    print 'This contains several variables that go into the PRF'
+    print 'This contains several variables that go into the PRF.'
+    print '--------------------------'
     
     wpa = wpa2slow.Wpa2()
     wpa.loadAP(capFile)
     
+    print '--------------------------'
+    print 'Testing various passwords...'
+    print 'Foo'
     print wpa.test('Foo')
+    print 'Bar'
     print wpa.test('Bar')
+    print 'dictionary'
     print wpa.test('dictionary')    #This is the AP's password
+    print '--------------------------'
+    
+    print 'Going fast...'
+    print 'Bar'
+    print wpa.test('Bar', fast=True)
+    print 'dictionary'
+    print wpa.test('dictionary', fast=True)    #This is the AP's password
     
     
     
