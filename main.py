@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ################################################################################
 #                              main.py 
-#    Tests and provides working examples for the wpa2slow library
+#    Provides working examples for the wpa2slow library
 #    Copyright (C) 2016  Jarrett Rainier
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -23,24 +23,6 @@ import wpa2slow
 import random
 import hashlib 
 import hmac 
-
-
-def test_sha1():
-    obj = wpa2slow.sha1.Sha1()
-    
-    str = ''
-
-    for x in range(0, 185):
-        input = random.randint(0, 0xff)
-        str = str + chr(random.randint(0, 0xff))
-        
-        v1 = obj.hashString(str)
-        v2 = hashlib.sha1(str).hexdigest()
-        print v1
-        print v2
-        if v1 != v2:
-            print "-------------- NOT EQUAL"
-        print "------------"
 
 def test_hmac():
     objSha = wpa2slow.sha1.Sha1()

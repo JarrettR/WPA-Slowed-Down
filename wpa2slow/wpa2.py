@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 ################################################################################
-#                            python_wpa2.py 
-#    WPA2 mock object
+#                            wpa2.py 
+#    WPA2 Parent Class
 #    Copyright (C) 2016  Jarrett Rainier
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-import hashlib #For testing mock objects
-import random
-from python_sha1 import Sha1Model
-from python_hmac import HmacModel
+from . import compare
+from . import handshake
+from . import hmac
+from . import pbkdf2
+from . import sha1
 
-class Wpa2Model(object):
+class Wpa2(object):
     
     def __init__(self):
-        self.W = [0] * 80
         self.reset()
         
     def reset(self):
@@ -45,10 +45,3 @@ class Wpa2Model(object):
             W = W + '{:08X} '.format(self.W[x])
         
         return W[:-1]
-
-if __name__ == "__main__":
-    objSha = Sha1Model()
-    objHmac = HmacModel(objSha)
-    
-    print "What"
-    
