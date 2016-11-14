@@ -9,9 +9,6 @@ import hashlib
 
 class Sha1TestSuite(unittest.TestCase):
     """SHA1 test cases."""
-
-    def test_true(self):
-        assert True
     
     def test_sha1_slow(self):
         obj = wpa2slow.sha1.Sha1()
