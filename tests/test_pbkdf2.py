@@ -20,10 +20,11 @@ class Pbkdf2TestSuite(unittest.TestCase):
         value = 'value'
         
         # 64 hex digits / 32 bytes / 256 bits
-        print objPbkdf2.run(objHmac, secret, value)
+        out = objPbkdf2.run(objHmac, secret, value)
         
-        #Grab comparison constant for test case
-        assert False
+        pPbkdf2 = '75b5b11e4b8ac91b7542c62302e5ce4373591285923d496d082c6e2c744e0717'
+        
+        self.assertEqual(out, pPbkdf2)
         
         
 if __name__ == '__main__':

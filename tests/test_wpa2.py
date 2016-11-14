@@ -20,24 +20,29 @@ class Wpa2TestSuite(unittest.TestCase):
         objHmac = wpa2slow.hmac.Hmac(objSha)
         objPrf = wpa2slow.compare.Prf(objHmac)
         
-        ptk = 'bf49a95f0494f44427162f38696ef8b6'
+        ptk = '5e9805e89cb0e84b45e5f9e4a1a80d9d'
         
-        data = '0103005ffe01090020000000000000000100000000' + \
-        '0000000000000000000000000000000000000000000000000' + \
-        '0000000000000000000000000000000000000000000000000' + \
-        '00000000000000000000000000000000000000000000000000000000'
+        data = '0103007502010a0000000000000000000' + \
+            '1e8dfa16b8769957d8249a4ec68d2b7641d3' + \
+            '782162ef0dc37b014cc48343e8dd20000000' + \
+            '000000000000000000000000000000000000' + \
+            '000000000000000000000000000000000000' + \
+            '00000000000000000001630140100000fac0' + \
+            '40100000fac040100000fac022800'
+            
+        mic = '56f98b98da5d55e3be396b43c7eb012a'
 
-        self.assertEqual(objPrf.MIC(ptk, data), '45282522bc6707d6a70a0317a3ed48f0')
+        self.assertEqual(objPrf.MIC(ptk, data), mic)
         
             
-    def test_full(self):
+    def test_full_slow(self):
         obj = wpa2slow.handshake.Handshake()
         objSha = wpa2slow.sha1.Sha1()
         objHmac = wpa2slow.hmac.Hmac(objSha)
         objPbkdf2 = wpa2slow.pbkdf2.Pbkdf2()
         objPrf = wpa2slow.compare.Prf(objHmac)
         
-        obj.load('test/wpa2.hccap')
+        obj.load('tests/data/wpa2.hccap')
         ssid = obj.ssid
         mac1 = obj.mac1
         mac2 = obj.mac2
@@ -55,7 +60,7 @@ class Wpa2TestSuite(unittest.TestCase):
         print 'eapol:       ' + objPrf.toHexString(eapol[0:eapol_size])
         print 'eapol_size:  ' + str(eapol_size)
         print 'keymic:      ' + objPrf.toHexString(keymic)
-        
+                
         mk = 'dictionary'
         print 'mk:          ' + mk
         
@@ -70,11 +75,9 @@ class Wpa2TestSuite(unittest.TestCase):
         mic = objPrf.MIC(ptk, objPrf.toHexString(eapol[0:eapol_size]))
         print 'MIC:         ' + mic
         print 'Expected:    ' + objPrf.toHexString(keymic)
-        if mic == objPrf.toHexString(keymic):
-            print 'Key found!'
-        else:
-            print 'Attempt failed!'
-        
+
+        self.assertEqual(mic, objPrf.toHexString(keymic))
+
         
 if __name__ == '__main__':
     unittest.main()
