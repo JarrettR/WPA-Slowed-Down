@@ -89,10 +89,3 @@ class Handshake(object):
         checked or automatically fixed.
         '''
         raise NotImplementedError('Write MAC/Nonce sorter')
-        
-        
-if __name__ == "__main__":
-    print 'Loading handshake...'
-    obj = Handshake()
-    obj.load('../test/wpa2.hccap')
-    

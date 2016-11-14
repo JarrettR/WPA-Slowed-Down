@@ -51,11 +51,6 @@ class Pbkdf2(object):
         out = self.toHexString(f1) + self.toHexString(f2)
         return out[0:64]
         
-    def addByte(self, input):
-        self.shiftMessage()
-        self.message[0] = input
-        self.messageLength = self.messageLength + 1
-        
     def xorString(self, in1, in2):
         i = 0
         out = ''
@@ -84,16 +79,3 @@ class Pbkdf2(object):
             #print input[-2:]
             str += "{:02x}".format(ord(input[x]))
         return str
-
-if __name__ == "__main__":
-    objSha = Sha1()
-    objHmac = Hmac(objSha)
-    objPbkdf2 = Pbkdf2()
-    secret = 'Jefe'
-    value = 'what do ya want for nothing?'
-    secret = 'secret'
-    value = 'value'
-    
-    # 64 hex digits / 32 bytes / 256 bits
-    print objPbkdf2.run(objHmac, secret, value)
-    
