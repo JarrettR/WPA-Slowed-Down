@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ################################################################################
 #                              main.py 
-#    Provides working examples for the wpa2slow library
+#    Provides working examples for the wpa2slow package
 #    Copyright (C) 2016  Jarrett Rainier
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,16 +19,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-import wpa2slow
-import random
-import hashlib 
-import hmac 
-    
+import wpa2slow    
 
 if __name__ == "__main__":
     capFile = wpa2slow.Handshake()
     
     capFile.load('tests/data/wpa2.hccap')
     
-    print capFile.ssid
+    print 'Loaded capture file for ' + capFile.ssid + '!'
+    print 'This contains several variables that go into the PRF'
+    
+    wpa = wpa2slow.Wpa2()
+    wpa.loadAP(capFile)
+    
+    print wpa.test('Foo')
+    print wpa.test('Bar')
+    print wpa.test('dictionary')    #This is the AP's password
+    
+    
     

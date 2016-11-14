@@ -19,11 +19,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from . import compare
-from . import handshake
-from . import hmac
-from . import pbkdf2
-from . import sha1
+from . import Sha1
+from . import Hmac
+from . import Pbkdf2
+from . import Handshake
+from . import Prf
 
 class Wpa2(object):
     
@@ -31,17 +31,32 @@ class Wpa2(object):
         self.reset()
         
     def reset(self):
-        self.message = [0] * 64
-        self.messageLength = 0
+        self.objSha = Sha1()
+        self.objHmac = Hmac(self.objSha)
+        self.objPbkdf2 = Pbkdf2()
+        self.objPrf = Prf(self.objHmac)
         
-    def addByte(self, input):
-        self.shiftMessage()
-        self.message[0] = input
-        self.messageLength = self.messageLength + 1
-
-    def formatW(self, start = 0, stop = 80):
-        W = ''
-        for x in range(start, stop):
-            W = W + '{:08X} '.format(self.W[x])
+    def loadAP(self, input):
+        self.ap = input
         
-        return W[:-1]
+    def loadMK(self, input):
+        self.mk = input
+        
+    def genMic(self, pmk):
+        ptk = self.objPrf.PRF(pmk, self.objPrf.toHexString(self.ap.mac1),
+                                    self.objPrf.toHexString(self.ap.mac2),
+                                    self.objPrf.toHexString(self.ap.nonce1),
+                                    self.objPrf.toHexString(self.ap.nonce2))        
+        mic = self.objPrf.MIC(ptk, self.objPrf.toHexString(self.ap.eapol[0:self.ap.eapol_size]))
+        return mic
+        
+    def test(self, input, fast=False):
+        self.loadMK(input)
+        pmk = self.objPbkdf2.run(self.objHmac, self.mk, self.ap.ssid)
+        mic = self.genMic(pmk)
+        keymic = self.objPrf.toHexString(self.ap.keymic)
+        if mic == keymic:
+            return True
+        else:
+            return False
+        

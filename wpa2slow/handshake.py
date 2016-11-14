@@ -80,7 +80,15 @@ class Handshake(object):
         B) self.keyver is not 0x01.
         0x01 means original WPA, and is not supported
         '''
-        raise NotImplementedError('Write this tester')
+        raise NotImplementedError('Write WPA / WPA2 check')
+        
+    def fix_order(self):
+        '''
+        The pseudorandom function(PRF) that generates the PTK requires both MAC and Nonce values 
+        to be sorted in numerical order. The CAP formats don't re-order these, so this should be
+        checked or automatically fixed.
+        '''
+        raise NotImplementedError('Write MAC/Nonce sorter')
         
         
 if __name__ == "__main__":

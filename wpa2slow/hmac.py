@@ -39,7 +39,7 @@ class Hmac(object):
         secret = 'Jefe'
         value = 'what do ya want for nothing?'
         print "Goal: "
-        print hmac.new(secret, value, hashlib.sha1).hexdigest()
+        #print hmac.new(secret, value, hashlib.sha1).hexdigest()
         return self.load(secret, value)
         
     def addSecret(self, secret):

@@ -51,13 +51,13 @@ class Prf(object):
     def PRF(self, pmk, apMac, cMac, apNonce, cNonce):
         
         b = min(apMac, cMac) + max(apMac, cMac) + min(apNonce, cNonce) + max(apNonce, cNonce)
-        print b
+        #print b
         r = ""
         
         #Note: The spec says to loop this waaaay too many times and then truncate output
         for x in xrange(4):
             r = r + self.objHmac.load(self.toAscii(pmk), self.a + self.toAscii("00" + b + "{:02x}".format(x)))
-            print r
+            #print r
         
         out = r
         return out[0:32]
