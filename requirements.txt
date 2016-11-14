@@ -1,4 +1,6 @@
 nose
 sphinx
+random
 hashlib
 binascii
+struct

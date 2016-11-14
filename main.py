@@ -26,19 +26,9 @@ import hmac
     
 
 if __name__ == "__main__":
-    print "Testing SHA1: "
-    test_sha1()
-    print "Testing HMAC: "
-    test_hmac()
-    print "Testing PBKDF2: "
-    test_pbkdf2()
-    print "Testing PRF: "
-    test_prf()
-    print "Testing MIC: "
-    test_mic()
-    print 'Testing handshake load:'
-    test_handshake_load()
-    print 'Testing Full Process:'
-    #test_full()
-    print "Finished"
+    capFile = wpa2slow.Handshake()
+    
+    capFile.load('tests/data/wpa2.hccap')
+    
+    print capFile.ssid
     

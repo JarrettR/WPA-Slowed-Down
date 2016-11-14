@@ -11,9 +11,9 @@ class PrfTestSuite(unittest.TestCase):
     """PRF test cases."""
     
     def test_prf_slow(self):
-        objSha = wpa2slow.sha1.Sha1()
-        objHmac = wpa2slow.hmac.Hmac(objSha)
-        objPrf = wpa2slow.compare.Prf(objHmac)
+        objSha = wpa2slow.Sha1()
+        objHmac = wpa2slow.Hmac(objSha)
+        objPrf = wpa2slow.Prf(objHmac)
         
         pmk = '9051ba43660caec7a909fbbe6b91e4685f1457b5a2e23660d728afbd2c7abfba'
         cMac = '001dd0f694b0'

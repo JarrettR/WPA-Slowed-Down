@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='wpa2slow',
-      version='0.2',
+      version='0.3',
       description='A really slow WPA2 implementation',
       url='http://github.com/JarrettR/WPA-Slowed-Down',
       author='Jarrett Rainier',

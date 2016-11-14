@@ -11,8 +11,8 @@ class HmacTestSuite(unittest.TestCase):
     """HMAC test cases."""
     
     def test_hmac_slow(self):
-        objSha = wpa2slow.sha1.Sha1()
-        objHmac = wpa2slow.hmac.Hmac(objSha)
+        objSha = wpa2slow.Sha1()
+        objHmac = wpa2slow.Hmac(objSha)
         
         secret = 'Jefe'
         value = 'what do ya want for nothing?'

@@ -12,7 +12,7 @@ class HandshakeTestSuite(unittest.TestCase):
     """Handshake test cases."""
     
     def test_handshake_load(self):
-        obj = wpa2slow.handshake.Handshake()
+        obj = wpa2slow.Handshake()
         
         obj.load('tests/data/wpa2.hccap')
         
