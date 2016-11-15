@@ -20,7 +20,7 @@
 ################################################################################
 
 from . import Sha1
-from . import Hmac
+from . import Hmac_Sha1
 from . import Pbkdf2
 from . import Handshake
 from . import Prf
@@ -32,7 +32,7 @@ class Wpa2(object):
         
     def reset(self):
         self.objSha = Sha1()
-        self.objHmac = Hmac(self.objSha)
+        self.objHmac = Hmac_Sha1(self.objSha)
         self.objPbkdf2 = Pbkdf2()
         self.objPrf = Prf(self.objHmac)
         

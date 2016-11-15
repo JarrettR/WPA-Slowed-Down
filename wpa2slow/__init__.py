@@ -1,6 +1,6 @@
 __all__ = [
     'Sha1',
-    'Hmac',
+    'Hmac_Sha1',
     'Pbkdf2',
     'Prf',
     'Handshake',
@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 from .sha1 import Sha1
-from .hmac import Hmac
+from .hmac_sha1 import Hmac_Sha1
 from .pbkdf2 import Pbkdf2
 from .compare import Prf
 from .handshake import Handshake

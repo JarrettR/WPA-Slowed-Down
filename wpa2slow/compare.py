@@ -21,7 +21,7 @@
 import random
 from binascii import a2b_hex, b2a_hex 
 from sha1 import Sha1
-from hmac import Hmac
+from hmac_sha1 import Hmac_Sha1
 
 '''
                           KEY FOUND! [ dictionary ]
@@ -64,7 +64,7 @@ class Prf(object):
 
     def MIC(self, ptk, data):
         objSha = Sha1()
-        objHmac = Hmac(objSha)
+        objHmac = Hmac_Sha1(objSha)
         
         ptk = self.toAscii(ptk)
         data = self.toAscii(data)

@@ -33,7 +33,6 @@ if __name__ == "__main__":
     wpa = wpa2slow.Wpa2()
     wpa.loadAP(capFile)
     
-    print '--------------------------'
     print 'Testing various passwords...'
     print 'Foo'
     print wpa.test('Foo')

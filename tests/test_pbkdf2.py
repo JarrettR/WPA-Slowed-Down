@@ -12,7 +12,7 @@ class Pbkdf2TestSuite(unittest.TestCase):
     
     def test_pbkdf2_slow(self):
         objSha = wpa2slow.Sha1()
-        objHmac = wpa2slow.Hmac(objSha)
+        objHmac = wpa2slow.Hmac_Sha1(objSha)
         objPbkdf2 = wpa2slow.Pbkdf2()
         secret = 'Jefe'
         value = 'what do ya want for nothing?'

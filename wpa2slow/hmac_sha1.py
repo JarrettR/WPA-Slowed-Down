@@ -22,7 +22,7 @@ from sha1 import Sha1
 import hashlib
 import hmac
 
-class Hmac(object):
+class Hmac_Sha1(object):
     
     def __init__(self, Sha1Obj):
         self.Sha1 = Sha1Obj
@@ -47,7 +47,10 @@ class Hmac(object):
             self.Bi[x] = self.Bi[x] ^ ord(secret[x])
             self.Bo[x] = self.Bo[x] ^ ord(secret[x])
 
-    def load(self, secret, value):
+    def load(self, secret, value, fast=False):
+        if fast == True:
+            return hmac.new(secret, value, hashlib.sha1).hexdigest()
+            
         self.reset()
         self.addSecret(secret)
         

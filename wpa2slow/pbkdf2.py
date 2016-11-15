@@ -21,7 +21,7 @@
 import hashlib #For testing mock objects
 import random
 from sha1 import Sha1
-from hmac import Hmac
+from hmac_sha1 import Hmac_Sha1
 
 class Pbkdf2(object):
     
@@ -34,16 +34,20 @@ class Pbkdf2(object):
         self.messageLength = 0
         
     def run(self, objHmac, mk, ssid, fast=False):
+        #Requires Python 2.7.8 or later
+        #Ubuntu 14.04 LTS generally only updates to 2.7.6 :(
+        #if fast==True:
+        #   return hashlib.pbkdf2_hmac('sha1', mk, ssid, 4095)
         
-        x1 = objHmac.load(mk, ssid + '\0\0\0\1')
-        x2 = objHmac.load(mk, ssid + '\0\0\0\2')
+        x1 = objHmac.load(mk, ssid + '\0\0\0\1', fast)
+        x2 = objHmac.load(mk, ssid + '\0\0\0\2', fast)
         
         f1 = self.toAscii(x1)
         f2 = self.toAscii(x2)
         
         for x in xrange(4095):
-            x1 = objHmac.load(mk, self.toAscii(x1))
-            x2 = objHmac.load(mk, self.toAscii(x2))
+            x1 = objHmac.load(mk, self.toAscii(x1), fast)
+            x2 = objHmac.load(mk, self.toAscii(x2), fast)
             
             f1 = self.xorString(self.toAscii(x1), f1)
             f2 = self.xorString(self.toAscii(x2), f2)

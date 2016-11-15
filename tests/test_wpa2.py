@@ -17,7 +17,7 @@ class Wpa2TestSuite(unittest.TestCase):
         
     def test_mic_slow(self):
         objSha = wpa2slow.Sha1()
-        objHmac = wpa2slow.Hmac(objSha)
+        objHmac = wpa2slow.Hmac_Sha1(objSha)
         objPrf = wpa2slow.Prf(objHmac)
         
         ptk = '5e9805e89cb0e84b45e5f9e4a1a80d9d'
@@ -38,7 +38,7 @@ class Wpa2TestSuite(unittest.TestCase):
     def test_full_slow(self):
         obj = wpa2slow.Handshake()
         objSha = wpa2slow.Sha1()
-        objHmac = wpa2slow.Hmac(objSha)
+        objHmac = wpa2slow.Hmac_Sha1(objSha)
         objPbkdf2 = wpa2slow.Pbkdf2()
         objPrf = wpa2slow.Prf(objHmac)
         
