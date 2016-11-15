@@ -69,15 +69,3 @@ class Hmac_Sha1(object):
             out = out + chr(intList[x])
         
         return out
-
-if __name__ == "__main__":
-    objSha = Sha1()
-    objHmac = Hmac(objSha)
-    secret = 'Jefe'
-    value = 'what do ya want for nothing?'
-    secret = 'secret'
-    value = 'value'
-    
-    print "Goal:   " + hmac.new(secret, value, hashlib.sha1).hexdigest()
-    print "Result: " + objHmac.load(secret, value)
-    

@@ -5,6 +5,7 @@ from .context import wpa2slow
 import unittest
 import hmac
 import hashlib
+from binascii import a2b_hex, b2a_hex 
 
 
 class Wpa2TestSuite(unittest.TestCase):
@@ -52,14 +53,14 @@ class Wpa2TestSuite(unittest.TestCase):
         eapol_size = obj.eapol_size
         keymic = obj.keymic
         
-        print 'ssid:        ' + objPrf.toHexString(ssid)
-        print 'mac1:        ' + objPrf.toHexString(mac1)
-        print 'mac2:        ' + objPrf.toHexString(mac2)
-        print 'nonce1:      ' + objPrf.toHexString(nonce1)
-        print 'nonce2:      ' + objPrf.toHexString(nonce2)
-        print 'eapol:       ' + objPrf.toHexString(eapol[0:eapol_size])
+        print 'ssid:        ' + b2a_hex(ssid)
+        print 'mac1:        ' + b2a_hex(mac1)
+        print 'mac2:        ' + b2a_hex(mac2)
+        print 'nonce1:      ' + b2a_hex(nonce1)
+        print 'nonce2:      ' + b2a_hex(nonce2)
+        print 'eapol:       ' + b2a_hex(eapol[0:eapol_size])
         print 'eapol_size:  ' + str(eapol_size)
-        print 'keymic:      ' + objPrf.toHexString(keymic)
+        print 'keymic:      ' + b2a_hex(keymic)
                 
         mk = 'dictionary'
         print 'mk:          ' + mk
@@ -69,14 +70,14 @@ class Wpa2TestSuite(unittest.TestCase):
         
         #This is so weird because of my terrible inconsistent binary types
         #     see https://github.com/JarrettR/WPA-Slowed-Down/issues/2
-        ptk = objPrf.PRF(pmk, objPrf.toHexString(mac1), objPrf.toHexString(mac2), objPrf.toHexString(nonce1), objPrf.toHexString(nonce2))
+        ptk = objPrf.PRF(pmk, b2a_hex(mac1), b2a_hex(mac2), b2a_hex(nonce1), b2a_hex(nonce2))
         print 'ptk:         ' + ptk
         
-        mic = objPrf.MIC(ptk, objPrf.toHexString(eapol[0:eapol_size]))
+        mic = objPrf.MIC(ptk, b2a_hex(eapol[0:eapol_size]))
         print 'MIC:         ' + mic
-        print 'Expected:    ' + objPrf.toHexString(keymic)
+        print 'Expected:    ' + b2a_hex(keymic)
 
-        self.assertEqual(mic, objPrf.toHexString(keymic))
+        self.assertEqual(mic, b2a_hex(keymic))
 
         
 if __name__ == '__main__':

@@ -24,6 +24,7 @@ from . import Hmac_Sha1
 from . import Pbkdf2
 from . import Handshake
 from . import Prf
+from binascii import a2b_hex, b2a_hex 
 
 class Wpa2(object):
     
@@ -43,18 +44,18 @@ class Wpa2(object):
         self.mk = input
         
     def genMic(self, pmk):
-        ptk = self.objPrf.PRF(pmk, self.objPrf.toHexString(self.ap.mac1),
-                                    self.objPrf.toHexString(self.ap.mac2),
-                                    self.objPrf.toHexString(self.ap.nonce1),
-                                    self.objPrf.toHexString(self.ap.nonce2))        
-        mic = self.objPrf.MIC(ptk, self.objPrf.toHexString(self.ap.eapol[0:self.ap.eapol_size]))
+        ptk = self.objPrf.PRF(pmk, b2a_hex(self.ap.mac1),
+                                    b2a_hex(self.ap.mac2),
+                                    b2a_hex(self.ap.nonce1),
+                                    b2a_hex(self.ap.nonce2))        
+        mic = self.objPrf.MIC(ptk, b2a_hex(self.ap.eapol[0:self.ap.eapol_size]))
         return mic
         
     def test(self, input, fast=False):
         self.loadMK(input)
         pmk = self.objPbkdf2.run(self.objHmac, self.mk, self.ap.ssid, fast=fast)
         mic = self.genMic(pmk)
-        keymic = self.objPrf.toHexString(self.ap.keymic)
+        keymic = b2a_hex(self.ap.keymic)
         if mic == keymic:
             return True
         else:
